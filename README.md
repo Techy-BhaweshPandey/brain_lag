@@ -160,7 +160,15 @@ firebase deploy --only hosting
 
 ### Deploy Auth Backend as Firebase Functions
 
+**Important**: Before deploying, you need to prepare the functions directory:
+
 ```bash
+# Copy necessary files from mindgauge-backend into functions directory
+# This is required because Firebase Functions deploys only the functions folder
+cp -r mindgauge-backend/routes functions/
+cp -r mindgauge-backend/models functions/
+cp -r mindgauge-backend/middlewares functions/
+
 # Install functions dependencies
 cd functions
 npm install
@@ -169,12 +177,16 @@ npm install
 firebase deploy --only functions
 ```
 
+**Alternative**: You can also modify `functions/index.js` to implement the routes directly without external dependencies.
+
 ### Deploy Python Backend to Google Cloud Run
+
+**Note**: Replace `YOUR_PROJECT_ID` with your actual Google Cloud Project ID (found in Firebase console or `gcloud config get-value project`)
 
 ```bash
 cd backend
 
-# Build Docker image
+# Build Docker image (replace YOUR_PROJECT_ID with your actual project ID)
 docker build -t gcr.io/YOUR_PROJECT_ID/brain-lag-ml:latest .
 
 # Push to Google Container Registry

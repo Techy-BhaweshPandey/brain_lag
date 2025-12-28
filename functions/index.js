@@ -9,7 +9,10 @@ app.use(cors({ origin: true }));
 app.use(express.json());
 
 // Import routes and middleware from mindgauge-backend
-// Note: You may need to adjust paths based on deployment structure
+// DEPLOYMENT NOTE: Before deploying to Firebase Functions, you need to either:
+// 1. Copy the mindgauge-backend routes and middlewares into the functions directory, OR
+// 2. Restructure to make these imports available in the functions deployment package
+// The relative path below assumes deployment structure includes parent directories
 const authRoutes = require('../mindgauge-backend/routes/auth');
 const rateLimiter = require('../mindgauge-backend/middlewares/rateLimiter');
 
