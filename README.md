@@ -181,10 +181,18 @@ firebase deploy --only functions
 
 ### Deploy Python Backend to Google Cloud Run
 
-**Note**: Replace `YOUR_PROJECT_ID` with your actual Google Cloud Project ID (found in Firebase console or `gcloud config get-value project`)
+**Prerequisites**: 
+1. Install Google Cloud CLI: https://cloud.google.com/sdk/docs/install
+2. Login to Google Cloud: `gcloud auth login`
+3. Set your project: `gcloud config set project YOUR_PROJECT_ID`
+
+**Note**: Replace `YOUR_PROJECT_ID` with your actual Google Cloud Project ID (found in Firebase console or run `gcloud config get-value project` after setting it)
 
 ```bash
 cd backend
+
+# Authenticate Docker with Google Container Registry
+gcloud auth configure-docker
 
 # Build Docker image (replace YOUR_PROJECT_ID with your actual project ID)
 docker build -t gcr.io/YOUR_PROJECT_ID/brain-lag-ml:latest .

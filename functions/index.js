@@ -19,17 +19,33 @@ const rateLimiter = require('../mindgauge-backend/middlewares/rateLimiter');
 app.use(rateLimiter);
 app.use('/api/auth', authRoutes);
 
-// MongoDB connection
+// MongoDB connection with proper connection pooling for Firebase Functions
+let isConnected = false;
+
 const connectDB = async () => {
+  if (isConnected) {
+    console.log('Using existing database connection');
+    return;
+  }
+  
   try {
-    await mongoose.connect(functions.config().mongodb.uri || process.env.MONGO_URI);
+    await mongoose.connect(
+      functions.config().mongodb?.uri || process.env.MONGO_URI,
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      }
+    );
+    isConnected = true;
     console.log('MongoDB Connected');
   } catch (err) {
     console.error('MongoDB connection error:', err);
+    throw err;
   }
 };
 
-connectDB();
-
-// Export Express app as Firebase Function
-exports.api = functions.https.onRequest(app);
+// Export Express app as Firebase Function with connection handling
+exports.api = functions.https.onRequest(async (req, res) => {
+  await connectDB();
+  return app(req, res);
+});
