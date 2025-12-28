@@ -1,0 +1,23 @@
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Firebase
+.firebase/
+firebase-debug.log
+functions/node_modules/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+env/
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Build
+frontend/myapp/build/
